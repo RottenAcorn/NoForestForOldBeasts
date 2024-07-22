@@ -16,6 +16,7 @@ public enum GameAttributeType
     Haste,
     Luck,
     MovementSpeed,
+    AngularSpeed,
     MaxHealthPercentage,
     DamagePercentage,
     RegenerationPercentage,
