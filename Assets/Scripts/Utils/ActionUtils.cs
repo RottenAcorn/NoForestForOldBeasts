@@ -20,8 +20,6 @@ public static class ActionUtils
             }
 
             if (target.transform.position.x < closestTarget.transform.position.x)
-                closestTarget = target;
-            
                 closestTarget = target;     
         }
 

@@ -30,6 +30,8 @@ public class NonPlayableEntity : Entity
     {
         if(IsClient)
             return;
+
+        SetNavMeshAgent();
         
 
         
