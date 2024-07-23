@@ -30,16 +30,7 @@ public class ActionHandler : Handler<ActionHandlerConfig>
         if (_action.ActionConfig.HasAbsoluteCooldown)
             return cooldown;
         
-        float haste = 0;
-    
-
-        foreach (var attribute in _action.GetSelf().Attributes)
-        {
-            if (attribute.Type == GameAttributeType.Haste)
-            {
-                haste += attribute.Value;
-            }
-        }
+        float haste = _action.GetSelf().GetValue(GameAttributeType.Haste);
 
         float cooldownReductionPercentage = haste / (haste + 100);
 
