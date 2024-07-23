@@ -35,6 +35,9 @@ public class PlayerControlAction : Action
         if (_playerInputConfig == null)
             return;
 
+        if(GetSelf().IsOwner == false)
+            return;
+
         if (Input.GetKey(_mappedInput[PlayerInputType.MoveUp]))
             _controller.Move(Vector3.up * _entityHandler.GetMovementSpeedModifier() * Time.deltaTime);
         
