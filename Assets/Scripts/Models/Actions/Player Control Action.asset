@@ -1,0 +1,19 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1bd086b178d8cb9409f54c89042ff3b1, type: 3}
+  m_Name: Player Control Action
+  m_EditorClassIdentifier: 
+  ActionId: 0
+  ActionType: 0
+  ActionConfig:
+    HasAbsoluteCooldown: 0
+  _playerInputConfig: {fileID: 11400000, guid: 99da6a1f040888e439fbf8bddb71a57c, type: 2}
