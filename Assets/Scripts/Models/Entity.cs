@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using Unity.Netcode;
 using Unity.Netcode.Components;
+using System;
 
 [RequireComponent(typeof(NetworkObject))]
 [RequireComponent(typeof(NetworkAnimator))]
@@ -21,13 +22,31 @@ public abstract class Entity : NetworkBehaviour
         if(IsOwner)
         {
             Actions.Add(action);
-            NetworkActions.Add( new NetworkAction() {
-                ActionId = action.ActionId,
-                CooldownTimer = action.CooldownTimer
-            });
+            // NetworkActions.Add( new NetworkAction() {
+            //     ActionId = action.ActionId,
+            //     CooldownTimer = action.CooldownTimer
+            // });
         }
     }
 
 
-    
+    public float GetValue(GameAttributeType type)
+    {
+        float value = 0;
+        value += GetValueFromAttributes(type);
+
+        return value;
+    }
+
+    float GetValueFromAttributes(GameAttributeType type)
+    {
+        float value = 0;
+        foreach (var attribute in Attributes)
+        {
+            if (attribute.Type == type)
+                value += attribute.Value;
+        }
+
+        return value;
+    }
 }
