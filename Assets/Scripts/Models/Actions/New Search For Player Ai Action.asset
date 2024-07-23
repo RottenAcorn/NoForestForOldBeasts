@@ -9,12 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 0}
-  m_Name: New Chase Ai Action
-  m_EditorClassIdentifier: Assembly-CSharp::ChaseAiAction
+  m_Script: {fileID: 11500000, guid: e38af05c4f664424899ced454efe1fb4, type: 3}
+  m_Name: New Search For Player Ai Action
+  m_EditorClassIdentifier: 
   ActionId: 0
   ActionType: 2
-  ActionFlags:
+  ActionConfig:
     HasAbsoluteCooldown: 1
-  Cooldown: 3
-  CooldownTimer: 0
+  BaseCooldown: 3

@@ -19,6 +19,7 @@ public abstract class Item : ScriptableObject
     [CreateAssetMenu(fileName = "NewWeapon", menuName = "Items/Weapon")]
     public class Weapon : Item
     {
+        public List<Action> Actions;
         private Gem _gem;
         public short GemId;
 
