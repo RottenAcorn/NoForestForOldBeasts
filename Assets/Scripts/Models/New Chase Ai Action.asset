@@ -13,8 +13,8 @@ MonoBehaviour:
   m_Name: New Chase Ai Action
   m_EditorClassIdentifier: Assembly-CSharp::ChaseAiAction
   ActionId: 0
-  ActionType: 0
+  ActionType: 2
   ActionFlags:
-    HasAbsoluteCooldown: 0
+    HasAbsoluteCooldown: 1
   Cooldown: 3
   CooldownTimer: 0

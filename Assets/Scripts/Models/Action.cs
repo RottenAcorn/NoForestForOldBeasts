@@ -63,7 +63,6 @@ public class ChaseAiAction : Action
 {
     private NonPlayableEntity _self;
     private Entity _target;
-    Transform _targetTransform;
 
     public override void OnStart()
     {
@@ -80,23 +79,17 @@ public class ChaseAiAction : Action
 
         CooldownTimer = Cooldown;
         if (ActionUtils.FindClosestPlayableEntity(GetSelf(), out PlayableEntity target, GameManager.Instance.PlayableEntities))
+        {
             _target = target;
+            _self.Agent.SetDestination(target.transform.position);
+        }
 
     }
-
-    void MoveTowardsTarget()
-    {
-        _self.Agent.SetDestination(_targetTransform.position);
-    }
-
     public override void OnUpdate()
     {
         if (_target == null)
             return;
 
-
-
-
-
+        FindClosestEnemy();
     }
 }
