@@ -16,4 +16,11 @@ public class ActionFactory
         action.Initialize(_owner);
         return action;
     }
+
+    public T Create<T> (T objectToClone) where T : BaseAction
+    {
+        T action = BaseAction.Instantiate(objectToClone);
+        action.Initialize(_owner);
+        return action;
+    }
 }

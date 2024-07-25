@@ -4,13 +4,16 @@ using Unity.VisualScripting.Dependencies.Sqlite;
 using UnityEngine;
 
 [CreateAssetMenu(menuName = "Actions/ToxicFangAction")]
-public class ToxicFangAction : Action.WithCooldown
+public class ToxicFangAction : Action.WithCooldown, INetworkAction
 {
     [SerializeField] float _radius;
     [SerializeField] float _baseDamage;
 
     public override void Execute()
     {
+        //TODO ADD VFX
+        //TODO ADD SOUND
+
         //find all nonPlayable enemies with radius
         if (ActionUtils.FindAllNonPlyableEntitiesInRadius(GetOwner(), out IEnumerable<NonPlayableEntity> targets, _radius))
         {
@@ -23,10 +26,10 @@ public class ToxicFangAction : Action.WithCooldown
     {
         float damage = _baseDamage + GetOwner().EntityHandler.GetDamageModifier(_baseDamage);
         //find target DealDamageAction
-        if (target.GetAction<ReceiveDamageAction>(out ReceiveDamageAction action))
-        {
-            action.ExecuteOnce(damage);
-        }
+        if (target.GetAction<ReceiveDamageAction>(out ReceiveDamageAction receiveDamageAction))
+            receiveDamageAction.ExecuteOnce(damage);
+        
+        //TODO Apply DOT
     }
 
 

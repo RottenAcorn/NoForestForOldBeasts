@@ -6,6 +6,8 @@ using UnityEditor;
 using Unity.Netcode;
 using Unity.Mathematics;
 using Unity.VisualScripting;
+using System.Reflection;
+using System.Linq;
 
 [Serializable]
 public struct ActionHandlerConfig : IHandlerConfig
@@ -15,12 +17,28 @@ public struct ActionHandlerConfig : IHandlerConfig
 }
 
 
+/// <summary>
+/// An action that can be executed only once, then it Exits
+/// </summary>
+[AttributeUsage(AttributeTargets.Method)]
+public class ExecuteOnceAttribute : Attribute
+{
+
+
+}
+
+/// <summary>
+/// An action that has a duration
+/// </summary>
 public interface IHasDuration
 {
     float Duration { get; }
     void OnDurationEnd();
 }
 
+/// <summary>
+/// An action that can be executed only on Entity owner pc
+/// </summary>
 public interface INetworkAction
 {
 
@@ -36,11 +54,16 @@ public abstract class BaseAction : ScriptableObject
     public Entity GetOwner() => _owner;
     public ActionHandlerConfig ActionConfig;
     protected ActionHandler _actionHandler;
+    protected MethodInfo ExecuteOnceMethod;
     public bool IsOwner => GetOwner().IsOwner;
     public void Initialize(Entity owner)
     {
         _owner = owner;
         _actionHandler = new ActionHandler(ActionConfig);
+
+        ExecuteOnceMethod = GetType()
+           .GetMethods(BindingFlags.NonPublic | BindingFlags.Public | BindingFlags.Instance)
+           .FirstOrDefault(m => m.GetCustomAttributes(typeof(ExecuteOnceAttribute), true).Length > 0);
     }
 
     public virtual void Setup() { }
@@ -62,7 +85,15 @@ public abstract class BaseAction : ScriptableObject
 
         Setup();
         Begin();
-        GameManager.Instance.OnUpdate += OnUpdate;
+
+        if (ExecuteOnceMethod != null)
+        {
+            ExecuteOnceMethod.Invoke(this, null);
+            Exit(); // Exiting after ExecuteOnce is called
+        }
+        else
+            GameManager.Instance.OnUpdate += OnUpdate;
+
     }
 
     public virtual void Run<T>(T startingParam)
@@ -74,7 +105,14 @@ public abstract class BaseAction : ScriptableObject
         Setup();
         Setup(startingParam);
         Begin();
-        GameManager.Instance.OnUpdate += OnUpdate;
+
+        if (ExecuteOnceMethod != null)
+        {
+            ExecuteOnceMethod.Invoke(this, null);
+            Exit(); // Exiting after ExecuteOnce is called
+        }
+        else
+            GameManager.Instance.OnUpdate += OnUpdate;
     }
 
     public virtual void Exit() =>
@@ -104,20 +142,33 @@ public abstract class Action<E> : BaseAction
         Setup();
 
         Begin();
-        GameManager.Instance.OnUpdate += () => OnUpdate(param);
+
+        if (ExecuteOnceMethod != null)
+        {
+            ExecuteOnceMethod.Invoke(this, null);
+            Exit(); // Exiting after ExecuteOnce is called
+        }
+        else
+            GameManager.Instance.OnUpdate += () => OnUpdate(param);
     }
 
-    public virtual void Run<S>(S param, E param2)
+    public virtual void Run<S>(S setupParam, E execParam)
     {
         if (this is INetworkAction networkAction)
             if (!IsOwner)
                 return;
 
         Setup();
-        Setup(param);
+        Setup(setupParam);
 
         Begin();
-        GameManager.Instance.OnUpdate += () => OnUpdate(param2);
+        if (ExecuteOnceMethod != null)
+        {
+            ExecuteOnceMethod.Invoke(this, null);
+            Exit(); // Exiting after ExecuteOnce is called
+        }
+        else
+            GameManager.Instance.OnUpdate += () => OnUpdate(execParam);
     }
 
 
@@ -145,7 +196,13 @@ public abstract class Action<E> : BaseAction
 
             // Start the cooldown coroutine
             Begin();
-            GameManager.Instance.OnUpdate += () => OnUpdate(param);
+            if (ExecuteOnceMethod != null)
+            {
+                ExecuteOnceMethod.Invoke(this, null);
+                Exit(); // Exiting after ExecuteOnce is called
+            }
+            else
+                GameManager.Instance.OnUpdate += () => OnUpdate(param);
         }
 
         public override void Run<S>(S setupParam, E execParam)
@@ -160,7 +217,13 @@ public abstract class Action<E> : BaseAction
 
             // Start the cooldown coroutine
             Begin();
-            GameManager.Instance.OnUpdate += () => OnUpdate(execParam);
+            if (ExecuteOnceMethod != null)
+            {
+                ExecuteOnceMethod.Invoke(this, null);
+                Exit(); // Exiting after ExecuteOnce is called
+            }
+            else
+                GameManager.Instance.OnUpdate += () => OnUpdate(execParam);
         }
 
 
@@ -228,7 +291,13 @@ public abstract class Action : BaseAction
 
             // Start the duration coroutine if the action implements IHasDuration
             Begin();
-            GameManager.Instance.OnUpdate += OnUpdate;
+            if (ExecuteOnceMethod != null)
+            {
+                ExecuteOnceMethod.Invoke(this, null);
+                Exit(); // Exiting after ExecuteOnce is called
+            }
+            else
+                GameManager.Instance.OnUpdate += OnUpdate;
         }
 
         public override void Run<T>(T startingParam)
@@ -244,7 +313,13 @@ public abstract class Action : BaseAction
             _cooldownCoroutine = GameManager.Instance.StartCoroutine(CooldownCoroutine());
 
             Begin();
-            GameManager.Instance.OnUpdate += OnUpdate;
+            if (ExecuteOnceMethod != null)
+            {
+                ExecuteOnceMethod.Invoke(this, null);
+                Exit(); // Exiting after ExecuteOnce is called
+            }
+            else
+                GameManager.Instance.OnUpdate += OnUpdate;
         }
 
         protected override void OnUpdate()

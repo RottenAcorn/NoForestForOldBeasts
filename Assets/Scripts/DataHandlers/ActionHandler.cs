@@ -32,5 +32,4 @@ public class ActionHandler
     {
         return GetCooldownModifier(actionWithCooldown as Action.WithCooldown);
     }
-
 }

@@ -5,8 +5,8 @@ using Steamworks;
 using UnityEngine;
 
 [RequireComponent(typeof(PlayableEntity))]
-[CreateAssetMenu(menuName = "Actions/PlayerControlAction")]
-public class PlayerControlAction : Action, INetworkAction
+[CreateAssetMenu(menuName = "Actions/ControlPlayerMovementAction")]
+public class ControlPlayerMovementAction : Action, INetworkAction
 {
     [SerializeField] private PlayerInputConfig _playerInputConfig;
 
