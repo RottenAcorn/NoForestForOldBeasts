@@ -28,4 +28,30 @@ public static class ActionUtils
 
         return true;
     }
+
+    public static bool FindAllNonPlyableEntitiesInRadius(Entity entity, out IEnumerable<NonPlayableEntity> targets, float radius)
+    {
+        targets = null;
+        Collider[] colliders= Physics.OverlapSphere(entity.transform.position, radius);
+        if(colliders == null)
+            return false;
+
+
+        List<NonPlayableEntity> playableEntities = new List<NonPlayableEntity>();
+        foreach(var collider in colliders)
+        {
+            if(collider.gameObject.TryGetComponent<NonPlayableEntity>(out NonPlayableEntity target))
+            {
+                playableEntities.Add(target);
+            }
+        }
+
+        if(playableEntities.Count == 0)
+            return false;
+
+
+        targets = playableEntities;
+        return true;
+
+    }
 }

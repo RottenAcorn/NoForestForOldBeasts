@@ -3,9 +3,8 @@ using System.Collections.Generic;
 using System.Linq;
 using Unity.Netcode;
 using UnityEngine;
-using UnityEngine.Playables;
 
-public class GameManager : NetworkBehaviour
+public class GameManager : MonoBehaviour
 {
     #region Singleton
     public static GameManager Instance;
@@ -29,30 +28,30 @@ public class GameManager : NetworkBehaviour
     public void Start()
     {
         //starting immediately as host for testing
-        SteamManager.Instance.HostLobby();
+       // SteamManager.Instance.HostLobby();
 
-        NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
-        NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
+      //  NetworkManager.Singleton.OnClientConnectedCallback += OnClientConnected;
+      //  NetworkManager.Singleton.OnClientDisconnectCallback += OnClientDisconnected;
     }
 
-    private void OnClientConnected(ulong clientId)
-    {
-        Debug.Log("Client Connected: " + clientId);
+    // private void OnClientConnected(ulong clientId)
+    // {
+    //     Debug.Log("Client Connected: " + clientId);
 
-        PlayableEntities.Append(NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.GetComponent<PlayableEntity>());
-    }
+    //     PlayableEntities.Append(NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.GetComponent<PlayableEntity>());
+    // }
 
     private void FixedUpdate()
     {
         OnUpdate?.Invoke();
     }
 
-    private void OnClientDisconnected(ulong clientId)
-    {
-        Debug.Log("Client Disconnected: " + clientId);
+    // private void OnClientDisconnected(ulong clientId)
+    // {
+    //     Debug.Log("Client Disconnected: " + clientId);
 
-        //remove from IEnumerable
-        PlayableEntities = PlayableEntities.Where(x => x != NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.GetComponent<PlayableEntity>());
-    }
+    //     //remove from IEnumerable
+    //     PlayableEntities = PlayableEntities.Where(x => x != NetworkManager.Singleton.ConnectedClients[clientId].PlayerObject.GetComponent<PlayableEntity>());
+    // }
 
 }

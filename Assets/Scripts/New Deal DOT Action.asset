@@ -9,15 +9,12 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cbc439866ddf53c428ccb5dc4d87a75e, type: 3}
-  m_Name: Player Input Config
+  m_Script: {fileID: 11500000, guid: 49da285140d19be4da7b2596f571f3df, type: 3}
+  m_Name: New Deal DOT Action
   m_EditorClassIdentifier: 
-  Value:
-  - KeyCode: 119
-    InputType: 0
-  - KeyCode: 115
-    InputType: 1
-  - KeyCode: 97
-    InputType: 2
-  - KeyCode: 100
-    InputType: 3
+  ActionId: 0
+  ActionConfig:
+    HasAbsoluteCooldown: 1
+  BaseCooldown: 1
+  <Duration>k__BackingField: 5
+  <Damage>k__BackingField: 1
