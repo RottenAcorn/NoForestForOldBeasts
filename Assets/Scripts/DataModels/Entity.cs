@@ -38,6 +38,15 @@ public abstract class Entity : NetworkBehaviour
         var actionFactory = new ActionFactory(this);
         var actionInitialized = actionFactory.Create(action);
         Actions.Add(actionInitialized);
+        actionInitialized.Run();
+    }
+
+    public virtual void AddAction<T, S>(T action, S param) where T : BaseAction
+    {
+        var actionFactory = new ActionFactory(this);
+        var actionInitialized = actionFactory.Create(action);
+        Actions.Add(actionInitialized);
+        actionInitialized.Run(param);
     }
 
     /// <summary>
