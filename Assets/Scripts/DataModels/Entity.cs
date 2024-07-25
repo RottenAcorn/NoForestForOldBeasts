@@ -33,6 +33,13 @@ public abstract class Entity : NetworkBehaviour
         }
     }
 
+    public virtual void AddAction<T>(T action) where T : BaseAction
+    {
+        var actionFactory = new ActionFactory(this);
+        var actionInitialized = actionFactory.Create(action);
+        Actions.Add(actionInitialized);
+    }
+
     /// <summary>
     /// Sets the value of a game attribute with the specified type.
     /// Creates a new struct with the updated value and replaces the existing struct in the list with the new struct.
